@@ -1,146 +1,232 @@
-# PlantGuard AI
+# 🌿 PlantGuard AI
 
-PlantGuard AI is a plant disease classification system: a FastAPI inference API backed by a TensorFlow/Keras model and a polished Streamlit interface. Drop in your trained model and class mapping — the system validates, preprocesses, runs inference, and returns ranked predictions.
+**AI-powered plant disease classification system built with EfficientNetB1, FastAPI, Streamlit, and Docker.**
 
-## Features
+PlantGuard AI analyzes plant leaf images and predicts the most likely disease or healthy condition. The system provides a confidence score and ranked predictions through a Streamlit web interface backed by a FastAPI inference API.
 
-- FastAPI `/health` and `/predict` endpoints
-- **Eager model loading at startup** — `/health` is immediately accurate
-- Strict upload validation (content type, extension, image decode, dimensions, 10 MB limit)
-- Configurable inference preprocessing to preserve training compatibility
-- TensorFlow/Keras `.keras` model loading with clear startup logging
-- Class mapping validation and top-three confidence-ranked predictions
-- Streamlit upload, preview, diagnosis, confidence badge (high/moderate/low), backend status, session history
-- Unit tests for validation, preprocessing, class mapping, model loading, and response shaping
+![PlantGuard AI Prediction](screenshots/plantguard-prediction.png)
 
-## Project layout
+---
+
+## 📊 Model Performance
+
+The trained EfficientNetB1 model was evaluated on the project's validation and test data.
+
+| Metric | Result |
+|---|---:|
+| **Test Accuracy** | **98.06%** |
+| **Validation Accuracy** | **97.97%** |
+| **Macro F1 Score** | **97.95%** |
+| **Model** | EfficientNetB1 |
+| **Input Size** | 240 × 240 |
+| **Color Mode** | RGB |
+| **Number of Classes** | 15 |
+| **Images After Deduplication** | 20,624 |
+| **Duplicate Images Removed** | 14 |
+
+> **Note:** 98.06% is the measured test-set accuracy. Individual prediction confidence can be different from overall model accuracy.
+
+---
+
+## 🚀 Features
+
+- 🌱 Plant disease classification from leaf images
+- 🧠 EfficientNetB1 transfer-learning model
+- 📈 98.06% test accuracy
+- 🎯 Top-3 ranked predictions
+- 📊 Prediction confidence scores
+- 🖼️ Image preview before analysis
+- ⚡ FastAPI inference backend
+- 🎨 Streamlit web interface
+- 🐳 Docker and Docker Compose support
+- ❤️ Backend health monitoring
+- 🔒 Image upload validation
+- 📐 Configurable image preprocessing
+- 🧪 Automated unit tests
+- 📚 Interactive Swagger API documentation
+
+---
+
+## 🌱 Supported Plant Conditions
+
+The current model supports **15 classes**.
+
+### Pepper
+
+- Pepper Bell — Bacterial Spot
+- Pepper Bell — Healthy
+
+### Potato
+
+- Potato — Early Blight
+- Potato — Late Blight
+- Potato — Healthy
+
+### Tomato
+
+- Tomato — Bacterial Spot
+- Tomato — Early Blight
+- Tomato — Late Blight
+- Tomato — Leaf Mold
+- Tomato — Septoria Leaf Spot
+- Tomato — Spider Mites
+- Tomato — Target Spot
+- Tomato — Tomato Yellow Leaf Curl Virus
+- Tomato — Tomato Mosaic Virus
+- Tomato — Healthy
+
+---
+
+## 🖥️ Application
+
+The Streamlit interface provides an image upload workflow and displays the predicted condition, confidence score, and top-ranked alternative predictions.
+
+### Prediction Example
+
+![PlantGuard AI Prediction](screenshots/plantguard-prediction.png)
+
+Example prediction:
+
+**Tomato Septoria leaf spot — 99.89% confidence**
+
+The application also displays the top three predictions with their confidence scores.
+
+> The 99.89% value above represents the confidence of this individual prediction, not the overall test accuracy of the model.
+
+---
+
+## 🔌 API
+
+PlantGuard AI uses **FastAPI** as the inference backend.
+
+### Available Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Check API and model status |
+| `POST` | `/predict` | Run plant disease prediction |
+| `GET` | `/docs` | Interactive Swagger API documentation |
+
+### API Documentation
+
+![PlantGuard AI API](screenshots/api-docs.png)
+
+The `/predict` endpoint accepts an uploaded plant leaf image and returns the prediction results.
+
+---
+
+## 🏗️ Architecture
 
 ```text
-backend/       FastAPI application and inference services
-frontend/      Streamlit dashboard
-model/         Trained model and class mapping (not committed to source control)
-tests/         Backend and integration tests
-```
+                    ┌─────────────────────┐
+                    │   User / Browser    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  Streamlit Frontend │
+                    │      Port 8501      │
+                    └──────────┬──────────┘
+                               │
+                         HTTP Request
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │    FastAPI API      │
+                    │      Port 8000      │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Image Validation &  │
+                    │    Preprocessing    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   EfficientNetB1    │
+                    │    Keras Model      │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │ Prediction + Top-3  │
+                    │    Confidence       │
+                    └─────────────────────┘
 
-## Quick start (Windows — no venv activation required)
 
-> **Note:** PowerShell execution policy may block `Activate.ps1`. Use the direct Python path below instead.
 
-### 1. Create the virtual environment and install dependencies
 
-```powershell
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-```
+                    🛠️ Technology Stack
+Machine Learning
+Python
+TensorFlow / Keras
+EfficientNetB1
+Transfer Learning
+Image Classification
+Backend
+FastAPI
+Uvicorn
+Pydantic
+Frontend
+Streamlit
+Deployment
+Docker
+Docker Compose
+Testing
+Pytest
+Ruff
 
-### 2. Copy the environment template
 
-```powershell
-copy .env.example .env
-```
 
-Edit `.env` if you need to change ports, CORS origins, or preprocessing defaults.
+Plant-Disease/
+│
+├── backend/
+│   ├── app/
+│   │   ├── config.py
+│   │   ├── image_utils.py
+│   │   ├── inference.py
+│   │   ├── main.py
+│   │   ├── preprocessing.py
+│   │   └── schemas.py
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── streamlit_app.py
+│   └── Dockerfile
+│
+├── model/
+│   ├── class_mapping.json
+│   ├── class_mapping.example.json
+│   ├── model_info.json
+│   └── plant_disease_model.keras
+│
+├── tests/
+│   ├── test_api.py
+│   ├── test_class_mapping.py
+│   ├── test_image_validation.py
+│   ├── test_model_loading.py
+│   └── test_preprocessing.py
+│
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── pyproject.toml
+├── requirements.txt
+├── requirements-api.txt
+├── requirements-ui.txt
+└── README.md
 
-### 3. Place model artifacts
 
-Copy your trained model and class mapping into the `model/` folder:
+---
 
-```
-model/plant_disease_model.keras
-model/class_mapping.json
-```
+# 🐳 Run with Docker
 
-### 4. Start the backend API
+Docker Compose is the recommended way to run the complete application.
 
-```powershell
-.venv\Scripts\python.exe -m uvicorn backend.app.main:app --reload --port 8000
-```
+### 1. Clone the repository
 
-The model loads at startup. Watch the console for:
-
-```
-PlantGuard AI — loading model artifacts…
-Model loaded and ready.
-```
-
-Then verify: http://127.0.0.1:8000/health  
-Interactive docs: http://127.0.0.1:8000/docs
-
-### 5. Start the frontend (separate terminal)
-
-```powershell
-.venv\Scripts\python.exe -m streamlit run frontend\streamlit_app.py
-```
-
-Open http://localhost:8501
-
-## Model integration
-
-PlantGuard accepts Keras `.keras` models. The class mapping must be a JSON object from string integer index to label:
-
-```json
-{
-  "0": "Apple Scab Leaf",
-  "1": "Apple leaf",
-  "2": "Apple rust leaf"
-}
-```
-
-The number of mapping entries must equal the model's output classes. If they differ, the API refuses to start inference and reports the mismatch clearly.
-
-Configure `IMAGE_WIDTH`, `IMAGE_HEIGHT`, `SCALE_MODE`, `COLOR_MODE`, and optionally `NORMALIZATION_MEAN`/`NORMALIZATION_STD` in `.env` to match your training pipeline exactly.
-
-| `SCALE_MODE` | Effect |
-|---|---|
-| `zero_one` | divide by 255 (default) |
-| `minus_one_one` | `pixel / 127.5 - 1.0` |
-| `none` | no scaling |
-
-Until both artifacts exist, `/health` reports `model_ready: false`, `/predict` returns a clear 503, and the UI explains what to add.
-
-## Confidence thresholds
-
-| Confidence | UI indicator |
-|---|---|
-| ≥ 80 % | ✓ High confidence (green) |
-| 50 – 79 % | ⚠ Moderate confidence (amber) |
-| < 50 % | ⚠ Low confidence (red) |
-
-Set `LOW_CONFIDENCE_THRESHOLD` in `.env` to control the model's own low-confidence flag (used separately from the UI tiers).
-
-## Tests and checks
-
-```powershell
-.venv\Scripts\python.exe -m pytest tests\ -v
-.venv\Scripts\python.exe -m ruff check backend frontend tests
-```
-
-Model-loading tests are skipped automatically if `plant_disease_model.keras` is not present.
-
-## Environment variables (`.env`)
-
-| Variable | Default | Description |
-|---|---|---|
-| `APP_NAME` | `PlantGuard AI API` | FastAPI title |
-| `CORS_ORIGINS` | `http://localhost:8501,http://127.0.0.1:8501` | Comma-separated allowed origins |
-| `MODEL_PATH` | `model/plant_disease_model.keras` | Relative or absolute path to model |
-| `CLASS_MAPPING_PATH` | `model/class_mapping.json` | Relative or absolute path to mapping |
-| `IMAGE_WIDTH` | `224` | Resize target width |
-| `IMAGE_HEIGHT` | `224` | Resize target height |
-| `COLOR_MODE` | `RGB` | `RGB` or `L` (grayscale) |
-| `SCALE_MODE` | `zero_one` | `zero_one`, `minus_one_one`, or `none` |
-| `NORMALIZATION_MEAN` | *(blank)* | Comma-separated per-channel mean |
-| `NORMALIZATION_STD` | *(blank)* | Comma-separated per-channel std |
-| `LOW_CONFIDENCE_THRESHOLD` | `0.60` | Flag low-confidence predictions |
-| `API_BASE_URL` | `http://127.0.0.1:8000` | Frontend → backend URL |
-
-## Deployment
-
-Set `CORS_ORIGINS` to the deployed frontend origin(s), set `API_BASE_URL` for the UI, and deliver the trained model through your secure artifact workflow — do not commit model weights to source control.
-
-For containers:
-
-```powershell
-docker compose up --build
-```
+```bash
+git clone https://github.com/Swagatpawar/Plant-Disease.git
+cd Plant-Disease
