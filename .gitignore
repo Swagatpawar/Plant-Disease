@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+*.log
+.streamlit/secrets.toml
+model/*.keras
+model/*.h5
+model/*.hdf5
+!model/.gitkeep
+!model/class_mapping.example.json
+data/

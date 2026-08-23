@@ -1,0 +1,13 @@
+{
+    "model": "EfficientNetB1",
+    "input_size": [
+        240,
+        240
+    ],
+    "num_classes": 15,
+    "validation_accuracy": 0.9797,
+    "test_accuracy": 0.9806,
+    "macro_f1": 0.9795,
+    "duplicates_removed": 14,
+    "dataset_images_after_deduplication": 20624
+}
