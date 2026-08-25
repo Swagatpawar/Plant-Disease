@@ -7,6 +7,8 @@ RUN pip install --no-cache-dir -r requirements-api.txt
 
 COPY backend ./backend
 COPY model ./model
+# Download the trained model from Hugging Face.
+RUN python -c "import urllib.request; urllib.request.urlretrieve('https://huggingface.co/Swagatpawar/plantguard-ai-model/resolve/main/plant_disease_model_final.keras?download=true', '/app/model/plant_disease_model.keras')"
 
 # Download the trained model from Hugging Face.
 RUN python -c "import urllib.request; urllib.request.urlretrieve('https://huggingface.co/Swagatpawar/plantguard-ai-model/resolve/main/plant_disease_model_final.keras?download=true', '/app/model/plant_disease_model.keras')"
