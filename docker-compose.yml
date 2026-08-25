@@ -3,12 +3,22 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    # env_file loads all variables from .env into the container.
+    # The explicit environment block below lets you override individual values
+    # for local dev without editing .env (useful in CI or when running
+    # docker-compose up on a machine that has a different frontend port).
     env_file: .env
+    environment:
+      # Redundant with .env but makes the intent explicit and easy to override.
+      CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8501,http://127.0.0.1:8501"
     ports:
       - "8000:8000"
     volumes:
       - ./model:/app/model:ro
 
+  # NOTE: The Next.js frontend (frontend-web/) is developed with `npm run dev`
+  # outside of Docker. The service below is the legacy Streamlit frontend and
+  # is kept here only for reference. It is safe to remove it.
   frontend:
     build:
       context: .
